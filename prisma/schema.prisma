@@ -7,7 +7,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("PRISMA_DATA_CONNECTION_STRING")
+}
+
+enum Type {
+  player
+  caddy
+  admin
 }
 
 model User {
@@ -15,7 +21,7 @@ model User {
   username      String        @unique
   passwordHash  String
   createdAt     DateTime      @default(now())
-  type          String
+  type          Type          @default(player)
   OwnedRounds   Round[]       @relation("owner")
   
   JoinedRounds  UserOnRound[]  @relation("players")
