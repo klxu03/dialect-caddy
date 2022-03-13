@@ -5,13 +5,13 @@ const prisma = new PrismaClient();
 async function seed() {
 	// Create some users in our database
 	await Promise.all(
-		getUsers.map((user) => {
+		getUsers().map((user) => {
 			const data = {
 				username: user.username,
 				// Original Password = password
 				passwordHash:
 					"$2a$10$PPgi0f4qWdaQh.Wb4.qIweRnY25U63BSW6t/h8mvGEYYxqx0YrX3e",
-				type: user.player,
+				type: user.type,
 			};
 			return prisma.user.create({ data });
 		})
