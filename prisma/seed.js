@@ -3,46 +3,52 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function seed() {
-	const defaultUser = await prisma.user.create({
-		data: {
-			username: "default",
-			// Original Password = twixrox
-			passwordHash:
-				"$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u",
-			type: "player",
-		},
-	});
-
+	// Create some users in our database
 	await Promise.all(
-		getPosts().map((post) => {
+		getUsers.map((user) => {
 			const data = {
-				userId: defaultUser.id,
-				...post,
+				username: user.username,
+				// Original Password = password
+				passwordHash:
+					"$2a$10$PPgi0f4qWdaQh.Wb4.qIweRnY25U63BSW6t/h8mvGEYYxqx0YrX3e",
+				type: user.player,
 			};
-			return prisma.post.create({ data });
+			return prisma.user.create({ data });
 		})
 	);
 }
 
 seed();
 
-function getPosts() {
+function getUsers() {
 	return [
 		{
-			title: "JavaScript Performance Tips",
-			body: `We will look at 10 simple tips and tricks to increase the speed of your code when writing JS`,
+			username: "player1",
+			type: "player",
 		},
 		{
-			title: "Tailwind vs. Bootstrap",
-			body: `Both Tailwind and Bootstrap are very popular CSS frameworks. In this article, we will compare them`,
+			username: "player2",
+			type: "player",
 		},
 		{
-			title: "Writing Great Unit Tests",
-			body: `We will look at 10 simple tips and tricks on writing unit tests in JavaScript`,
+			username: "player3",
+			type: "player",
 		},
 		{
-			title: "What Is New In PHP 8?",
-			body: `In this article we will look at some of the new features offered in version 8 of PHP`,
+			username: "caddy1",
+			type: "caddy",
+		},
+		{
+			username: "caddy2",
+			type: "caddy",
+		},
+		{
+			username: "caddy3",
+			type: "caddy",
+		},
+		{
+			username: "admin1",
+			type: "admin",
 		},
 	];
 }

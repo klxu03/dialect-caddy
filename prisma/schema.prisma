@@ -24,15 +24,15 @@ model User {
   type          Type          @default(player)
   OwnedRounds   Round[]       @relation("owner")
   
-  JoinedRounds  UserOnRound[]  @relation("players")
+  JoinedRounds  UserOnRound[] @relation("user-useronround")
 }
 
 model UserOnRound {
   id            String        @id @default(uuid())
   userId        String
-  user          User          @relation(name: "players", fields: [userId], references: [id])
+  user          User          @relation(name: "user-useronround", fields: [userId], references: [id])
   roundId       String
-  round         Round         @relation(name: "players", fields: [roundId], references: [id])
+  round         Round         @relation(name: "round-useronround", fields: [roundId], references: [id])
 }
 
 model Round {
@@ -40,5 +40,6 @@ model Round {
   ownerId       String
   owner         User          @relation(name: "owner", fields: [ownerId], references: [id])
   playersId     String[]
-  players       UserOnRound[]   @relation("players")
+  
+  players       UserOnRound[] @relation("round-useronround")
 }
