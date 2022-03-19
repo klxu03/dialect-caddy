@@ -8,6 +8,8 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 
+import { Sidebar } from "~/components/Sidebar";
+
 import globalStylesUrl from "~/styles/global.css";
 
 export const meta: MetaFunction = () => {
@@ -58,5 +60,10 @@ const Document = ({ children }: DocumentType) => {
 };
 
 const Layout = ({ children }: any) => {
-	return <>{children}</>;
+	return (
+		<>
+			<Sidebar />
+			{children}
+		</>
+	);
 };
