@@ -91,6 +91,23 @@ export async function getUser(request: Request) {
 	}
 }
 
+// Get userIds from username
+export async function getUserFromUsername(username: string) {
+	console.log("username param is ", username);
+	try {
+		const user = await db.user.findUnique({
+			where: {
+				username,
+			},
+		});
+		console.log("getUserFromUsername", user);
+
+		return user;
+	} catch (error) {
+		return null;
+	}
+}
+
 // Log out user and destroy session
 export async function logout(request: Request) {
 	const session = await storage.getSession(request.headers.get("Cookie"));

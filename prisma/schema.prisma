@@ -39,7 +39,8 @@ model Round {
   id            String        @id @default(uuid())
   ownerId       String
   owner         User          @relation(name: "owner", fields: [ownerId], references: [id])
-  playersId     String[]
+  roundTime     DateTime      @default(now())
+  usersId       String[]
   
   players       UserOnRound[] @relation("round-useronround")
 }

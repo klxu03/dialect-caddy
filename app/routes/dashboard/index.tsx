@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { ActionFunction } from "remix";
 import dashboardStyles from "~/styles/dashboard/styles.css";
 import { useLoaderData } from "remix";
 

@@ -39,13 +39,17 @@ export function Sidebar() {
 					</div>
 				</div>
 				<div>
-					{data ? (
+					<form action="/auth/logout" method="POST">
+						<button type="submit">Logout</button>
+					</form>
+					<Link to="/auth/login">Log In</Link>
+					{/* {data ? (
 						<form action="/auth/logout" method="POST">
 							<button type="submit">Logout</button>
 						</form>
 					) : (
 						<Link to="/auth/login">Log In</Link>
-					)}
+					)} */}
 				</div>
 			</div>
 		</div>
