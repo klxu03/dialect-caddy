@@ -8,10 +8,17 @@ import {
 	getUsernameFromUserId,
 } from "~/utils/session.server";
 
+// Search
+import { Search } from "~/components/Search";
+import searchStylesUrl from "~/styles/components/search.css";
 export const links = () => [
 	{
 		rel: "stylesheet",
 		href: dashboardStyles,
+	},
+	{
+		rel: "stylesheet",
+		href: searchStylesUrl,
 	},
 ];
 
@@ -116,6 +123,9 @@ const AddRound = () => {
 					setPlayer(event.target.value);
 				}}
 			/>
+
+			<Search />
+
 			<button
 				onClick={(e) => {
 					e.preventDefault();
