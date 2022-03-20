@@ -104,6 +104,52 @@ export async function getUserFromUsername(username: string) {
 
 		return user;
 	} catch (error) {
+		console.log("getUserFromUsername has an error");
+		return null;
+	}
+}
+
+// Get the username of someone with a userId
+export async function getUsernameFromUserId(userId: string) {
+	try {
+		const user = await db.user.findUnique({
+			where: {
+				id: userId,
+			},
+		});
+
+		const username = user.username;
+
+		return username;
+	} catch (error) {
+		console.log("getUsernameFromUserId has an error");
+		return null;
+	}
+}
+
+// Get all the rounds someone with a userId is involved with
+export async function getRoundsFromUser(userId: string) {
+	try {
+		const rounds_userOnRound = await db.userOnRound.findMany({
+			where: {
+				userId,
+			},
+		});
+		console.log("rounds_userOnRound", rounds_userOnRound);
+
+		let rounds: any[] = [];
+		for (let round of rounds_userOnRound) {
+			const newRound = await db.round.findUnique({
+				where: {
+					id: round.roundId,
+				},
+			});
+			rounds = [...rounds, newRound];
+		}
+
+		return rounds;
+	} catch (error) {
+		console.log("getRoundFromUser has an error");
 		return null;
 	}
 }

@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import dashboardStyles from "~/styles/dashboard/styles.css";
 import { useLoaderData } from "remix";
 
-import { getUser } from "~/utils/session.server";
+import {
+	getUser,
+	getRoundsFromUser,
+	getUsernameFromUserId,
+} from "~/utils/session.server";
 
 export const links = () => [
 	{
@@ -19,22 +23,20 @@ export const loader = async ({ request, params }: any) => {
 		};
 	}
 
-	const roundData = [
-		{
-			id: 1,
-			date: "3/17 @ 12:51 PM",
-			owner: "KurtisPlayer1",
-			players: 2,
-			caddies: 1,
-		},
-		{
-			id: 2,
-			date: "3/18 @ 12:51 PM",
-			owner: "KurtisPlayer2",
-			players: 5,
-			caddies: 2,
-		},
-	];
+	const roundsData = await getRoundsFromUser(user.id);
+	console.log("roundsData", roundsData);
+
+	// Change each round in roundsData from having
+	let roundData: any = [];
+	for (let round of roundsData) {
+		const ownerName = await getUsernameFromUserId(round.ownerId);
+		const newRound = {
+			...round,
+			owner: ownerName,
+		};
+		roundData = [...roundData, newRound];
+	}
+	console.log("roundData", roundData);
 
 	const data = {
 		user,
@@ -51,10 +53,10 @@ const Row = ({ round }: any) => {
 			<td>
 				<input type="checkbox" />
 			</td>
-			<td>{round.date}</td>
+			<td>{round.roundTime}</td>
 			<td>{round.owner}</td>
-			<td>{round.players}</td>
-			<td>{round.caddies}</td>
+			<td>{round.usersId.length} is wrong since this is players + caddies</td>
+			<td>{round.usersId.length} is wrong since this is players + caddies</td>
 			<td
 				onClick={() => {
 					setActive(!active);
