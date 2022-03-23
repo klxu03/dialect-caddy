@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import dashboardStyles from "~/styles/dashboard/styles.css";
-import { useLoaderData } from "remix";
+import { useLoaderData, useFetcher } from "remix";
 
 import {
 	getUser,
@@ -52,6 +52,19 @@ export const loader = async ({ request, params }: any) => {
 	return data;
 };
 
+const Search = ({ user, type }: any) => {
+	return (
+		<>
+			<div className="dropdown dropdown-content show">
+				<p onClick={() => console.log("About")}>About</p>
+				<p>Blog</p>
+				<p>Base</p>
+				<p>Contact</p>
+			</div>
+		</>
+	);
+};
+
 const Row = ({ round }: any) => {
 	const [active, setActive] = useState<Boolean>(false);
 
@@ -101,6 +114,8 @@ const AddRound = () => {
 	const [caddy, setCaddy] = useState<string>("");
 	const [numCaddies, setNumCaddies] = useState<number>(0);
 
+	const userSearch = useFetcher();
+
 	return (
 		<form method="post" action="/dashboard">
 			<label htmlFor="date">Date</label>
@@ -114,17 +129,35 @@ const AddRound = () => {
 			<br />
 			<br />
 
-			<label htmlFor="player">Search Players </label>
-			<input
-				type="text"
-				name="Add Players"
-				value={player}
-				onChange={(event) => {
-					setPlayer(event.target.value);
-				}}
-			/>
+			<userSearch.Form
+				method="get"
+				action={`/dashboard/user-search/type/player/user/${player}`}>
+				<div>
+					<label htmlFor="player">Search Players </label>
+					<input
+						type="text"
+						name="Add Players"
+						value={player}
+						onChange={(event) => {
+							setPlayer(event.target.value);
+							console.log("event.target", event.target.form);
+							userSearch.submit(event.target.form);
+							console.log("userSearch", userSearch);
+						}}
+					/>
+					{/* {userSearch.state == "submitting" && <h1>Submitting</h1>} */}
+					{userSearch.data &&
+						(userSearch.data.length ? (
+							userSearch.data.map((username: string) => {
+								return <h1>{username}</h1>;
+							})
+						) : (
+							<h2>No User Matches This</h2>
+						))}
 
-			<Search />
+					{/* <Search /> */}
+				</div>
+			</userSearch.Form>
 
 			<button
 				onClick={(e) => {
@@ -236,7 +269,7 @@ function Dashboard() {
 	useEffect(() => {
 		console.log(data);
 	}, []);
-	const [modalActive, setModalActive] = useState<boolean>(false);
+	const [modalActive, setModalActive] = useState<boolean>(true);
 
 	return (
 		<>
